@@ -13,17 +13,9 @@ datasource db {
 model User {
   id         Int        @id @default(autoincrement())
   username   String     @unique
+  auth_token String     @unique
   discord_id String     @unique
-  session    Session[]
   resource   Resource[]
-}
-
-model Session {
-  id          Int      @id
-  User        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id     Int
-  auth_token  String
-  valid_until DateTime
 }
 
 model Resource {
@@ -31,6 +23,7 @@ model Resource {
   resource_url String
   tag          String
   is_audio     Boolean
+  volume       Int?
   update_at    DateTime @default(now())
   created_at   DateTime @default(now())
   author       User     @relation(fields: [author_id], references: [id])

@@ -1,33 +1,50 @@
+import { TRPCError } from '@trpc/server';
 import { writable } from 'svelte/store';
-import type { User } from '@specialist/types';
+import type { DiscordUser } from '@specialist/types';
+import { alert } from './alert';
 import { trpc } from '$lib/trpc';
 
 const createStore = () => {
-  const { set, subscribe, update } = writable<User | null>(null);
+  const { set, subscribe, update } = writable<DiscordUser | null>(null);
 
-  const init = async (userId: string) => {
-    console.log(`calling init with userid ${userId}`);
+  const start = async () => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
     try {
       const user = await trpc.getUser.query(userId);
-      localStorage.setItem('discordUserId', user.id);
       set(user);
     } catch (error) {
-      console.log('Unable to complete TRPC user fetch');
-      console.error(error);
+      alert.handleError(error);
     }
   };
 
-  const userId = localStorage.getItem('discordUserId');
-  if (userId) init(userId);
+  start();
 
   return {
     subscribe,
     update,
     logout: () => {
       set(null);
-      localStorage.removeItem('discordUserId');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('token');
     },
-    login: async (userId: string) => await init(userId)
+    login: async (token: string) => {
+      try {
+        const user = await trpc.loginUser.mutate(token);
+        set(user);
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', user.id);
+      } catch (error) {
+        alert.handleError(error);
+      }
+    },
+    createToken: async (userId: string) => {
+      try {
+        await trpc.createUserToken.mutate(userId);
+      } catch (error) {
+        alert.handleError(error);
+      }
+    }
   };
 };
 

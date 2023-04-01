@@ -22,37 +22,9 @@
 
 <div
   data-tauri-drag-region
-  class="flex h-12 items-center justify-between bg-base-100 px-2 shadow-lg "
+  class="flex h-12 items-center justify-end bg-base-100 px-2 shadow-lg "
 >
-  <div class="flex gap-x-4 font-bold">
-    <button on:click={pop}>
-      <Fa icon={faArrowLeft} size="1.5x" />
-    </button>
-
-    <button
-      on:click={() => {
-        window.history.forward();
-      }}
-    >
-      <Fa icon={faArrowRight} size="1.5x" />
-    </button>
-    <a href="/#content/audios">Audios</a>
-    <a href="/#content/images">Images</a>
-  </div>
-
   <div class="flex items-center gap-x-3 h-full">
-    <a href="/#settings" use:link class="max-h-full py-1">
-      {#if $user}
-        <img
-          src={$user.avatarUrl}
-          alt="user avatar"
-          class="max-h-full py-1 rounded-3xl"
-        />
-      {:else}
-        <Fa icon={faUserCircle} size="2x" />
-      {/if}
-    </a>
-
     <ThemeToggle theme={$theme} onClick={theme.toggleTheme} />
 
     <a

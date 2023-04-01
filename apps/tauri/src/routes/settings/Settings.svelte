@@ -24,15 +24,11 @@
   <a
     use:link
     href="/#settings/servers"
-    class="flex flex-col gap-y-4 capitalize w-80 text-3xl rounded-md font-extrabold btn btn-primary "
+    class="flex flex-col gap-y-4 capitalize w-80 text-3xl rounded-md font-extrabold btn btn-primary  relative"
   >
-    {#each $servers as { iconUrl, id, name }, i (i)}
-      <img class="rounded-3xl" src={iconUrl} alt="" />
-    {:else}
-      <div class="text-black dark:text-white">
-        <Fa icon={faServer} size={'4x'} />
-      </div>
-    {/each}
-    Servers
+    <div class="text-black dark:text-white">
+      {$servers.length}
+    </div>
+    Server{$servers.length - 1 ? 's' : ''}
   </a>
 </main>

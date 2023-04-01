@@ -1,7 +1,4 @@
-<script lang="ts">
-  import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-  import Fa from 'svelte-fa';
-  import { pop } from 'svelte-spa-router';
-
-  let filter = '';
-</script>
+<div class="dev h-full flex flex-col justify-center items-center">
+  <h1 class="font-extrabold text-3xl">Welcome to Specialist interface</h1>
+  <img src="/pepe_cope.webp" alt="pepe copium" />
+</div>

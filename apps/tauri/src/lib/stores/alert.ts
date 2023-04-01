@@ -1,3 +1,4 @@
+import { TRPCClientError } from '@trpc/client';
 import { writable } from 'svelte/store';
 
 type Alert = {
@@ -20,6 +21,18 @@ const createStore = () => {
     hide: () => {
       clearTimeout(timeoutId);
       set(null);
+    },
+    handleError: (error: any) => {
+      if (error instanceof TRPCClientError)
+        alert.show({
+          level: 'error',
+          message: error.message
+        });
+      else
+        alert.show({
+          level: 'error',
+          message: 'Unknown error instance, look at console'
+        });
     }
   };
 };

@@ -1,4 +1,5 @@
 {
   "watch": ["./src/**/*"],
-  "exec": "ts-node --esm ./src/index.ts"
+  "exec": "ts-node --esm ./src/index.ts",
+  "delay": 1000
 }
