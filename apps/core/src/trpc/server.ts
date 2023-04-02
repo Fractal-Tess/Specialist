@@ -1,7 +1,7 @@
 import { createHTTPServer } from '@trpc/server/adapters/standalone';
 import cors from 'cors';
 
-import { appRouter } from './router/router.js';
+import { appRouter } from './routers/index.js';
 import { config } from '../config.js';
 import { createContext } from './context.js';
 

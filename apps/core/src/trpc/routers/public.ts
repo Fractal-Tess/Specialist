@@ -1,12 +1,13 @@
 import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
+
 import {
   handleGetAudios,
   handleGetBot,
   handleGetImages,
   handleGetServer,
   handleGetUser
-} from './../handlers.js';
+} from '../handlers.js';
 import { createToken, loginUser } from '../../discord/auth.js';
 
 const t = initTRPC.create();
