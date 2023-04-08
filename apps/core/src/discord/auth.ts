@@ -30,10 +30,19 @@ export const createToken = async (
     create: {
       discord_id: user.id,
       username: user.username,
-      auth_token: token
+      auth_token: {
+        create: {
+          auth_token: token
+        }
+      }
     },
     update: {
-      auth_token: token
+      auth_token: {
+        // Check if entry is deleted when a new token is create
+        create: {
+          auth_token: token
+        }
+      }
     }
   });
 };
@@ -43,7 +52,11 @@ export const loginUser = async (
 ): Promise<DiscordUser | never> => {
   const user = await prisma.user.findFirst({
     where: {
-      auth_token: token
+      auth_token: {
+        auth_token: {
+          equals: token
+        }
+      }
     }
   });
   if (!user)

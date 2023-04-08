@@ -5,8 +5,7 @@
     "module": "NodeNext",
     "target": "ESNext",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "dist"
+    "noEmit": true
   },
   "include": ["src/**/*"]
 }

@@ -6,6 +6,7 @@ import {
   playAudioWithUser
 } from '../discord/utils.js';
 import { DiscordBot, DiscordServer, DiscordUser } from '@specialist/types';
+
 import { prisma } from '../prisma.js';
 
 export const handleGetUser = (discordUserId: string): DiscordUser | never => {
@@ -55,27 +56,20 @@ export const handleGetBot = (): DiscordBot => {
 };
 
 export const handleGetImages = async () =>
-  await prisma.resource.findMany({
-    where: {
-      is_audio: false
-    },
+  await prisma.image.findMany({
     include: {
-      author: {
-        select: { username: true, id: true }
+      User: {
+        select: { username: true, discord_id: true }
       }
     }
   });
 
 export const handleGetAudios = async () =>
-  await prisma.resource.findMany({
-    where: {
-      is_audio: true
-    },
+  await prisma.audio.findMany({
     include: {
-      author: {
+      User: {
         select: {
           username: true,
-          id: true,
           discord_id: true
         }
       }

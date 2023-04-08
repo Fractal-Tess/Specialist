@@ -13,19 +13,49 @@ datasource db {
 model User {
   id         Int        @id @default(autoincrement())
   username   String     @unique
-  auth_token String     @unique
   discord_id String     @unique
-  resource   Resource[]
+  auth_token AuthToken?
+  Audios     Audio[]
+  Image      Image[]
+  Link       Link[]
 }
 
-model Resource {
+model AuthToken {
   id           Int      @id @default(autoincrement())
-  resource_url String
-  tag          String
-  is_audio     Boolean
-  volume       Int?
-  update_at    DateTime @default(now())
-  created_at   DateTime @default(now())
-  author       User     @relation(fields: [author_id], references: [id])
-  author_id    Int
+  auth_token   String   @unique
+  generated_at DateTime @default(now())
+  User         User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user_id      Int      @unique
+}
+
+model Audio {
+  id          Int       @id @default(autoincrement())
+  buffer      Bytes
+  tag         String    @unique
+  audio_level Int
+  created_at  DateTime  @default(now())
+  updated_at  DateTime?
+  User        User?     @relation(fields: [user_id], references: [id])
+  user_id     Int?
+}
+
+model Image {
+  id         Int       @id @default(autoincrement())
+  buffer     Bytes
+  tag        String    @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+  User       User?     @relation(fields: [user_id], references: [id])
+  user_id    Int?
+}
+
+model Link {
+  id         Int       @id @default(autoincrement())
+  label      String
+  link       String
+  text       String
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+  User       User?     @relation(fields: [user_id], references: [id])
+  user_id    Int?
 }

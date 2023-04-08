@@ -1,2 +1,2 @@
 export * from './public.js';
-export * from './authed.js';
+export * from './auth.js';

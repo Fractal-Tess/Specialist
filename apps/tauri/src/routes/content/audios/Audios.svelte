@@ -10,7 +10,7 @@
   let filter = '';
   let audios: Awaited<ReturnType<typeof trpc.getAudios.query>>;
 
-  const fetchAudios = async () => (audios = await trpc.getAudios.query());
+  const fetchAudios = async () => (audios = await trpc.);
   fetchAudios();
 
   let delay = 0;
@@ -25,6 +25,16 @@
   onDestroy(() => {
     clearInterval(interval);
   });
+
+
+  const playAudio = async(tag:string)=>{
+await trpc.playAudio.mutate({
+                  audioUrl: resource_url,
+                  discordUserId: $user.id
+                });
+                startDelay();
+  }
+
   $: console.log(filter);
 </script>
 
@@ -45,11 +55,6 @@
               class="text-primary hover:scale-125 duration-300 transition-transform"
               on:click={async () => {
                 if (!$user) return;
-                await trpc.playAudio.mutate({
-                  audioUrl: resource_url,
-                  discordUserId: $user.id
-                });
-                startDelay();
               }}>
               <Fa icon={faPlayCircle} size={'2x'} />
             </button>

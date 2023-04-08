@@ -1,12 +1,11 @@
-import { initTRPC } from '@trpc/server';
+import { router as userRouter } from './user.js';
+import { router as discordRouter } from './discord.js';
 
-import { router as publicRouter } from './public.js';
-import { router as protectedRouter } from './protected.js';
 import { trpc } from '../trpc.js';
 
-const { mergeRouters } = initTRPC.create();
 export const appRouter = trpc.router({
-  get: user
+  user: userRouter,
+  discord: discordRouter
 });
 
 export type AppRouter = typeof appRouter;
