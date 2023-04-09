@@ -8,10 +8,10 @@ const createStore = () => {
   const { set, subscribe, update } = writable<DiscordUser | null>(null);
 
   const start = async () => {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
+    const discordUserId = localStorage.getItem('discordUserId');
+    if (!discordUserId) return;
     try {
-      const user = await trpc.getUser.query(userId);
+      const user = await trpc.user.get.query({ discordUserId: discordUserId });
       set(user);
     } catch (error) {
       alert.handleError(error);
@@ -30,17 +30,18 @@ const createStore = () => {
     },
     login: async (token: string) => {
       try {
-        const user = await trpc.loginUser.mutate(token);
-        set(user);
-        localStorage.setItem('token', token);
-        localStorage.setItem('userId', user.id);
+        const user = await trpc.user.login.mutate({ token });
+        console.log(user);
+        // set(user);
+        // localStorage.setItem('token', token);
+        // localStorage.setItem('userId', user.id);
       } catch (error) {
         alert.handleError(error);
       }
     },
-    createToken: async (userId: string) => {
+    createToken: async (discordUserId: string) => {
       try {
-        await trpc.createUserToken.mutate(userId);
+        await trpc.user.createToken.mutate({ discordUserId });
       } catch (error) {
         alert.handleError(error);
       }

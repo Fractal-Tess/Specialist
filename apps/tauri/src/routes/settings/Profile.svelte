@@ -1,10 +1,7 @@
 <script lang="ts">
   import { user } from '$lib/stores/user';
   let userId = '';
-  let authToken = '';
-
-  const createToken = () => user.createToken(userId);
-  const login = () => user.login(authToken);
+  let token = '';
 </script>
 
 <div class="flex flex-col h-full items-center justify-center gap-8">
@@ -23,7 +20,10 @@
   {:else}
     <p class="text-3xl font-bold">Login</p>
 
-    <form on:submit|preventDefault={createToken}>
+    <form
+      on:submit|preventDefault={() => {
+        user.createToken(userId);
+      }}>
       <label class="input-group w-min">
         <span class="w-20 justify-center">ID</span>
         <input
@@ -37,15 +37,18 @@
       </label>
     </form>
 
-    <form on:submit|preventDefault={login}>
+    <form
+      on:submit|preventDefault={() => {
+        user.login(token);
+      }}>
       <label class="input-group w-min">
         <span class="w-20 justify-center">Token</span>
         <input
-          bind:value={authToken}
+          bind:value={token}
           type="password"
           class="input input-bordered placeholder:opacity-30 focus:outline-none" />
         <button
-          class:!btn-disabled={authToken.length !== 24}
+          class:!btn-disabled={token.length !== 24}
           class="btn btn-outline btn-primary w-32">Login</button>
       </label>
     </form>

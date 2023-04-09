@@ -11,7 +11,9 @@ const createStore = () => {
     const serverIds = JSON.parse(cached) as string[];
     serverIds.map(async id => {
       try {
-        const server = await trpc.getServer.query(id);
+        const server = await trpc.discord.server.get.query({
+          discordServerId: id
+        });
         update(servers => [...servers, server]);
       } catch (error) {
         console.error(
@@ -33,8 +35,8 @@ const createStore = () => {
   return {
     subscribe,
     update,
-    addServer: async (serverId: string): Promise<void | never> => {
-      const server = await trpc.getServer.query(serverId);
+    addServer: async (discordServerId: string): Promise<void | never> => {
+      const server = await trpc.discord.server.get.query({ discordServerId });
       update(servers => {
         if (servers.map(server => server.id).includes(server.id))
           throw new Error('Server is already added');

@@ -4,7 +4,8 @@ import { config } from '../../config.js';
 import { TRPCError } from '@trpc/server';
 
 export const authProcedure = trpc.procedure.use(({ next, ctx }) => {
-  const authorizationHeader = ctx.req.headers.authorization;
+  console.log(ctx.req.headers);
+  const authorizationHeader = ctx.req.headers.cookie;
   if (!authorizationHeader)
     throw new TRPCError({
       code: 'UNAUTHORIZED',
