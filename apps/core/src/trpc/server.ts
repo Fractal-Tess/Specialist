@@ -9,7 +9,13 @@ export type AppRouter = typeof appRouter;
 
 export const startTRPC = () => {
   createHTTPServer({
-    middleware: cors(),
+    middleware: cors({
+      credentials: true,
+      origin: e => {
+        console.log(e);
+        return true;
+      }
+    }),
     router: appRouter,
     createContext
   }).listen(config.PORT);

@@ -32,9 +32,11 @@ importers:
       '@specialist/prisma': workspace:*
       '@specialist/types': workspace:^1.0.0
       '@trpc/server': ^10.18.0
+      '@types/cookie': ^0.5.1
       '@types/cors': ^2.8.13
       '@types/jsonwebtoken': ^9.0.1
       commander: ^10.0.0
+      cookie: ^0.5.0
       cors: ^2.8.5
       discord.js: ^14.8.0
       dotenv: ^16.0.3
@@ -56,9 +58,11 @@ importers:
       '@discordjs/voice': 0.15.0_ffmpeg-static@5.1.0
       '@specialist/types': link:../../packages/types
       '@trpc/server': 10.18.0
+      '@types/cookie': 0.5.1
       '@types/cors': 2.8.13
       '@types/jsonwebtoken': 9.0.1
       commander: 10.0.0
+      cookie: 0.5.0
       cors: 2.8.5
       discord.js: 14.8.0
       dotenv: 16.0.3
@@ -1212,6 +1216,10 @@ packages:
     resolution: {integrity: sha512-pYrtLtOwku/7r1i9AMONsJMVYAtk3hzOfiGNekhtq5tYBGA7unMve8RvUclKLMT3PrihvJqUmzsRGh0RP84hKg==}
     dev: true
 
+  /@types/cookie/0.5.1:
+    resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
+    dev: true
+
   /@types/cors/2.8.13:
     resolution: {integrity: sha512-RG8AStHlUiV5ysZQKq97copd2UmVYw3/pRMLefISZ3S1hK104Cwm7iLQ3fTKx+lsUH2CE8FlLaYeEA2LSeqYUA==}
     dependencies:
@@ -1925,6 +1933,11 @@ packages:
       inherits: 2.0.4
       readable-stream: 3.6.2
       typedarray: 0.0.6
+
+  /cookie/0.5.0:
+    resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
+    engines: {node: '>= 0.6'}
+    dev: true
 
   /cors/2.8.5:
     resolution: {integrity: sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==}

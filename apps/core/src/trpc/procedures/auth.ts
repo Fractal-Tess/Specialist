@@ -1,5 +1,5 @@
 import { trpc } from '../trpc.js';
-import { decode, verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { config } from '../../config.js';
 import { TRPCError } from '@trpc/server';
 
@@ -12,13 +12,13 @@ export const authProcedure = trpc.procedure.use(({ next, ctx }) => {
       message: "You are missing the 'authorization' header"
     });
 
-  if (!verify(authorizationHeader, config.JWT_SECRET))
+  if (!jwt.verify(authorizationHeader, config.JWT_SECRET))
     throw new TRPCError({
       code: 'UNAUTHORIZED',
       message: 'The signature of JWT is not valid'
     });
 
-  const user = decode(authorizationHeader);
+  const user = jwt.decode(authorizationHeader);
 
   console.log(user);
 

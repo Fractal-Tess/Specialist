@@ -48,7 +48,7 @@
           type="password"
           class="input input-bordered placeholder:opacity-30 focus:outline-none" />
         <button
-          class:!btn-disabled={token.length !== 24}
+          class:!btn-disabled={token.length !== 32}
           class="btn btn-outline btn-primary w-32">Login</button>
       </label>
     </form>

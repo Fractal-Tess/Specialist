@@ -1,22 +1,9 @@
 import { TRPCError } from '@trpc/server';
+import cookie from 'cookie';
 
 import { prisma } from '../../../prisma.js';
 import { DiscordUser } from '@specialist/types';
-import { client } from './../../../bot/bot.js';
-
-// Helpers
-
-const getDiscordUser = (discordUserId: string) => {
-  const user = client.users.cache.get(discordUserId);
-
-  if (!user)
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: `User with the id of '${discordUserId} was not found'`
-    });
-
-  return user;
-};
+import { generateToken, getDiscordUser } from './helper.js';
 
 export const getUser = (discordUserId: string): DiscordUser => {
   const discordUser = getDiscordUser(discordUserId);
@@ -29,7 +16,61 @@ export const getUser = (discordUserId: string): DiscordUser => {
 
 export const createToken = async (discordUserId: string) => {
   const discordUser = getDiscordUser(discordUserId);
-
-  console.log(user);
+  const authToken = generateToken(32);
+  await prisma.user.upsert({
+    where: {
+      discord_id: discordUserId
+    },
+    create: {
+      discord_id: discordUser.id,
+      username: discordUser.username,
+      auth_token: {
+        create: {
+          auth_token: authToken
+        }
+      }
+    },
+    update: {
+      auth_token: {
+        upsert: {
+          create: {
+            auth_token: authToken
+          },
+          update: {
+            auth_token: authToken,
+            generated_at: new Date()
+          }
+        }
+      }
+    }
+  });
+  const dm = await discordUser.createDM();
+  dm.send(
+    `Your new auth token is \`\`\`${authToken}\`\`\`Do not share this token, as having access to it allows anyone to impersonate you.`
+  );
 };
-export const loginUser = async (token: string) => {};
+
+export const loginUser = async (
+  authToken: string,
+  setHeader: (name: string, value: string | number | string[]) => unknown
+) => {
+  const user = await prisma.authToken.findFirst({
+    where: {
+      auth_token: {
+        equals: authToken
+      }
+    }
+  });
+
+  if (!user)
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'That token is invalid'
+    });
+  const authCookie = cookie.serialize('authToken', authToken, {
+    httpOnly: true,
+    expires: new Date(new Date().setFullYear(new Date().getFullYear() + 5))
+  });
+
+  // setHeader('set-cookie', authCookie);
+};
