@@ -50,10 +50,7 @@ export const createToken = async (discordUserId: string) => {
   );
 };
 
-export const loginUser = async (
-  authToken: string,
-  setHeader: (name: string, value: string | number | string[]) => unknown
-) => {
+export const loginUser = async (authToken: string) => {
   const user = await prisma.authToken.findFirst({
     where: {
       auth_token: {
@@ -67,10 +64,12 @@ export const loginUser = async (
       code: 'UNAUTHORIZED',
       message: 'That token is invalid'
     });
+
   const authCookie = cookie.serialize('authToken', authToken, {
     httpOnly: true,
-    expires: new Date(new Date().setFullYear(new Date().getFullYear() + 5))
+    expires: new Date(new Date().setFullYear(new Date().getFullYear() + 5)),
+    path: '/'
   });
 
-  // setHeader('set-cookie', authCookie);
+  return authCookie;
 };

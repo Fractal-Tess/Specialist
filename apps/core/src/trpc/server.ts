@@ -11,10 +11,7 @@ export const startTRPC = () => {
   createHTTPServer({
     middleware: cors({
       credentials: true,
-      origin: e => {
-        console.log(e);
-        return true;
-      }
+      origin: (requestOrigin, callback) => callback(null, requestOrigin)
     }),
     router: appRouter,
     createContext

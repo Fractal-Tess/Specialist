@@ -18,20 +18,8 @@ export const router = trpc.router({
   login: publicProcedure
     .input(z.object({ token: z.string() }))
     .mutation(async req => {
-      const c = cookie.serialize(
-        'authToken',
-        'g1OlXzPPsA5VDMRALfAOqLzls1sQAk9u',
-        {
-          path: '/',
-          expires: new Date(
-            new Date().setFullYear(new Date().getFullYear() + 5)
-          )
-        }
-      );
-
-      console.log('req');
-      req.ctx.res.setHeader('set-cookie', c);
-      // loginUser(req.input.token, req.ctx.res.setHeader);
+      const authToken = await loginUser(req.input.token);
+      req.ctx.res.setHeader('Set-Cookie', authToken);
     }),
 
   createToken: publicProcedure
@@ -41,7 +29,7 @@ export const router = trpc.router({
       })
     )
     .mutation(async req => {
-      return await createToken(req.input.discordUserId);
+      await createToken(req.input.discordUserId);
     }),
   test: authProcedure.query(req => {
     console.log('test proc');
