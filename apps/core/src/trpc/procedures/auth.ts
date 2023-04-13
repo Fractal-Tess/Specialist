@@ -1,24 +1,35 @@
-import { trpc } from '../trpc.js';
-import jwt from 'jsonwebtoken';
-import { config } from '../../config.js';
 import { TRPCError } from '@trpc/server';
+import cookie from 'cookie';
 
-export const authProcedure = trpc.procedure.use(({ next, ctx }) => {
-  console.log(ctx.req.headers);
-  const authorizationHeader = ctx.req.headers.cookie;
-  if (!authorizationHeader)
+import { trpc } from '../trpc.js';
+import { config } from '../../config.js';
+import { prisma } from '../../prisma.js';
+
+export const authProcedure = trpc.procedure.use(async ({ next, ctx }) => {
+  const reqCookie = cookie.parse(ctx.req.headers.cookie || '');
+  const authToken = reqCookie.token;
+  if (!authToken)
     throw new TRPCError({
       code: 'UNAUTHORIZED',
-      message: "You are missing the 'authorization' header"
+      message: 'You are somehow missing the token in your cookie`'
     });
 
-  if (!jwt.verify(authorizationHeader, config.JWT_SECRET))
+  const user = await prisma.user.findFirst({
+    where: {
+      auth_token: {
+        auth_token: {
+          equals: authToken
+        }
+      }
+    }
+  });
+
+  if (!user) {
     throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'The signature of JWT is not valid'
+      code: 'NOT_FOUND',
+      message: "A user with your auth token doesn't exist"
     });
-
-  const user = jwt.decode(authorizationHeader);
+  }
 
   console.log(user);
 
