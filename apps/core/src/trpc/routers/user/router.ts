@@ -32,6 +32,6 @@ export const router = trpc.router({
       await createToken(req.input.discordUserId);
     }),
   test: authProcedure.query(req => {
-    console.log('test proc');
+    console.log('Test auth procedure hit');
   })
 });
